@@ -430,33 +430,7 @@ class LeakyReluLayer(Layer):
     def __repr__(self):
         return 'LeakyReluLayer'
 
-class RandomReluLayer(Layer):
-    """Layer implementing an element-wise randomized rectified linear transformation."""
-    def __init__(self, lower=0.125, upper=0.3333333333333333, rng=None):
-        self.lower = lower
-        self.upper = upper
-        self.rng = rng
 
-        if rng is None:
-            self.rng = np.random.RandomState(seed=1234)
-
-    def fprop(self, inputs, leakiness=None):
-        """Forward propagates activations through the layer transformation.
-
-        For inputs `x` and outputs `y` this corresponds to `y = ..., else`.
-        """
-        raise NotImplementedError
-
-    def bprop(self, inputs, outputs, grads_wrt_outputs):
-        """Back propagates gradients through a layer.
-
-        Given gradients with respect to the outputs of the layer calculates the
-        gradients with respect to the layer inputs.
-        """
-        raise NotImplementedError
-
-    def __repr__(self):
-        return 'RandomReluLayer'
 
 class ParametricReluLayer(LayerWithParameters):
     """Layer implementing an element-wise parametric rectified linear transformation."""
@@ -510,28 +484,6 @@ class ParametricReluLayer(LayerWithParameters):
     def __repr__(self):
         return 'ParametricReluLayer'
 
-class ExponentialLinearUnitLayer(Layer):
-    """Layer implementing an element-wise exponential linear transformation."""
-    def __init__(self, alpha=0.01):
-        self.alpha = alpha
-
-    def fprop(self, inputs):
-        """Forward propagates activations through the layer transformation.
-
-        For inputs `x` and outputs `y` this corresponds to `y = ..., else`.
-        """
-        raise NotImplementedError
-
-    def bprop(self, inputs, outputs, grads_wrt_outputs):
-        """Back propagates gradients through a layer.
-
-        Given gradients with respect to the outputs of the layer calculates the
-        gradients with respect to the layer inputs.
-        """
-        raise NotImplementedError
-
-    def __repr__(self):
-        return 'ExponentialLinearUnitLayer'
 
 class TanhLayer(Layer):
     """Layer implementing an element-wise hyperbolic tangent transformation."""
@@ -709,12 +661,7 @@ class DropoutLayer(StochasticLayer):
         Returns:
             outputs: Array of layer outputs of shape (batch_size, output_dim).
         """
-        if stochastic:
-            mask_shape = (1,) + inputs.shape[1:] if self.share_across_batch else inputs.shape
-            self._mask = (self.rng.uniform(size=mask_shape) < self.incl_prob)
-            return inputs * self._mask
-        else:
-            return inputs * self.incl_prob
+        raise NotImplementedError
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -734,7 +681,7 @@ class DropoutLayer(StochasticLayer):
             Array of gradients with respect to the layer inputs of shape
             (batch_size, input_dim).
         """
-        return grads_wrt_outputs * self._mask
+        raise NotImplementedError
 
     def __repr__(self):
         return 'DropoutLayer(incl_prob={0:.1f})'.format(self.incl_prob)

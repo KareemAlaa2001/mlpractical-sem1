@@ -3,95 +3,85 @@
 \input{cw_setup}
 
 %% uses fancyhdr
-\lhead{\sffamily MLP 2019/20:  Coursework 1}
-\rhead{\sffamily Due: 25 October 2019}
+\lhead{\sffamily MLP 2020/21:  Coursework 1}
+\rhead{\sffamily Due: 30 October 2020}
 \cfoot{\sffamily \thepage}
-
+% \usepackage{subcaption}
+% \usepackage{caption}
 \begin{document}
 
 \begin{center}
-\textsf{\textbf{\Large Machine Learning Practical 2019/20: Coursework 1}}
+\textsf{\textbf{\Large Machine Learning Practical 2020/21: Coursework 1}}
 
 \bigskip
-\textbf{Released: Monday 14 October 2019}
+\textbf{Released: Monday 19 October 2020}
 
-\textbf{Submission due: 16:00 Friday 25 October 2019}
+\textbf{Submission due: 16:00 Friday 30 October 2020}
 \end{center}
 \section{Introduction}
 \label{sec:introduction}
-% Basic summary:
-% 1. Build baseline, build networks with 1 to 3 layers, with 32, 64, 128 units, choose best.
-% 2. Implement leaky relu, random relu, parameterized relu and ELU
-% 3. Investigate the implemented activation functions, compare and contrast their performance. Furthermore, compare and contrast the learned 
 
-The aim of this coursework is to explore the classification of images of handwritten digits using neural networks. The first part of the coursework will concern the implementation of different activation functions (discussed in \href{http://www.inf.ed.ac.uk/teaching/courses/mlp/2019-20/lectures/mlp04-reg.pdf}{lecture 4}) in the MLP framework. The second part will involve exploring different multi-layer neural network architectures. 
+The aim of this coursework is to explore the classification of images of handwritten digits using neural networks. 
+The first part of this coursework will concern the identification and discussion of a \textit{fundamental problem} in machine learning, as shown in Figure~\ref{fig:errorfn}. 
+Following this preliminary discussion, you will further investigate this problem in \textit{wider} and \textit{deeper} neural networks, study it in terms of network width and depth. 
+The second part involves implementing different methods to combat the problem identified in Task 1 and then comparing these methods empirically and theoretically. 
+In the final part, you will briefly discuss the main strengths and weakness of any one related work to the methods examined in Task 2. 
 
-The coursework will use an extended version of the MNIST database, the EMNIST Balanced dataset, described in Section~\ref{sec:emnist}.  Section \ref{sec:code} describes the additional code provided for the coursework (in branch \texttt{mlp2019-20/coursework\_1} of the MLP github), and Section \ref{sec:tasks} describes how the coursework is structured into four tasks.  The main deliverable of this coursework is a report, discussed in section \ref{sec:report}, using a template that is available on the github.  Section \ref{sec:mechanics} discusses the details of carrying out and submitting the coursework, and the marking scheme is discussed in Section \ref{sec:marking-scheme}.
+The coursework will use an extended version of the MNIST database, the EMNIST Balanced dataset, described in Section~\ref{sec:emnist}.  Section \ref{sec:code} describes the additional code provided for the coursework (in branch \texttt{mlp2020-21/coursework\_1} of the MLP github), and Section \ref{sec:tasks} describes how the coursework is structured into three tasks. 
+The main deliverable of this coursework is a report, discussed in section \ref{sec:report}, using a template that is available on the github. 
+Section \ref{sec:mechanics} discusses the details of carrying out and submitting the coursework, and the marking scheme is discussed in Section \ref{sec:marking-scheme}.
 
-You will need to submit your completed report as a PDF file  and your local version of the \texttt{mlp} code including any changes  you made to the provided (\texttt{.py} files).  The detailed submission instructions are given in Section \ref{sec:submission} -- please follow these instructions carefully.
+You will need to submit your completed report as a PDF file  and your local version of the \texttt{mlp} code including any changes you made to the provided (\texttt{.py} files).  
+The detailed submission instructions are given in Section \ref{sec:submission} -- please follow these instructions carefully.
 
 \section{EMNIST dataset}
 \label{sec:emnist}
-In this coursework we shall use the  EMNIST  (Extended MNIST) Balanced dataset \citep{cohen2017emnist}, \url{https://www.nist.gov/itl/iad/image-group/emnist-dataset}.  EMNIST extends MNIST by including images of handwritten letters (upper and lower case) as well as handwritten digits. Both EMNIST and MNIST are extracted from the same underlying dataset, referred to as NIST Special Database 19.  Both use the same conversion process resulting in centred images of dimension 28$\times$28.  
+In this coursework we shall use the  EMNIST  (Extended MNIST) Balanced dataset \citep{cohen2017emnist}, \url{https://www.nist.gov/itl/iad/image-group/emnist-dataset}. EMNIST extends MNIST by including images of handwritten letters (upper and lower case) as well as handwritten digits. Both EMNIST and MNIST are extracted from the same underlying dataset, referred to as NIST Special Database 19.  Both use the same conversion process resulting in centred images of dimension 28$\times$28.  
 
 There are 62 potential classes for EMNIST (10 digits, 26 lower case letters, and 26 upper case letters).  However, we shall use a reduced label set of 47 different labels.  This is because (following the data conversion process)  there are 15 letters for which it is confusing to discriminate between upper-case and lower-case versions.  In the 47 label set, upper- and lower-case labels are merged for the following letters:\\
 \texttt{C, I, J, K, L, M, O, P, S, U, V, W, X, Y, Z}.  
 
-The training set for Balanced EMNIST has about twice the number of examples as the MNIST training set, thus you should expect the run-time of your experiments to be about twice as long.  The expected accuracy rates are lower for EMNIST than for MNIST (as EMNIST has more classes, and more confusable examples), and differences in accuracy between different systems should be larger.   \citet{cohen2017emnist} present some baseline results for EMNIST.
+The training set for Balanced EMNIST has about twice the number of examples as the MNIST training set, thus you should expect the run-time of your experiments to be about twice as long.  The expected accuracy rates are lower for EMNIST than for MNIST (as EMNIST has more classes, and more confusable examples), and differences in accuracy between different systems should be larger. \citet{cohen2017emnist} present some baseline results for EMNIST.
 
 You do \emph{not} need to directly download the EMNIST database from the \href{https://www.nist.gov/itl/iad/image-group/emnist-dataset}{nist.gov} website, as it is part of the \verb+coursework_1+ branch in the \verb+mlpractical+ Github repository,  discussed in Section~\ref{sec:code} below.
 
-
-
 \newpage
-\section{Github branch \texttt{mlp2019-20/coursework\_1}}
+\section{Github branch \texttt{mlp2020-21/coursework\_1}}
 \label{sec:code}
 
-You should run all of the experiments for the coursework inside the
-Conda environment you set up for the labs.  The code for the coursework 
-is available on the course
-\href{https://github.com/CSTR-Edinburgh/mlpractical/}{Github repository}
-on a branch \verb+mlp2019-20/coursework_1+. To create a local working
-copy of this branch in your local repository you need to do the
-following.
+You should run all of the experiments for the coursework inside the Conda environment you set up for the labs. The code for the coursework is available on the course \href{https://github.com/VICO-UoE/mlpractical/}{Github repository} on a branch \verb+mlp2020-21/coursework_1+. 
+To create a local working copy of this branch in your local repository you need to do the following.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \itemsep3pt\parskip0pt\parsep0pt
-\item
-  Make sure all modified files on the branch you are currently have been
-  committed
-  (see \href{https://github.com/CSTR-Edinburgh/mlpractical/blob/mlp2019-20/master/notes/getting-started-in-a-lab.md}{notes/getting-started-in-a-lab.md} if you are unsure how to do this).
-\item
-  Fetch changes to the upstream \texttt{origin} repository by running\\
+\item Make sure all modified files on the branch you are currently have been committed
+  (see \href{https://github.com/VICO-UoE/mlpractical/blob/mlp2020-21/lab1/notes/getting-started-in-a-lab.md}{notes/getting-started-in-a-lab.md} if you are unsure how to do this).
+\item Fetch changes to the upstream \texttt{origin} repository by running\\
   \texttt{git fetch origin}
-\item
-  Checkout a new local branch from the fetched branch using\\
-  \verb+git checkout -b coursework_1 origin/mlp2019-20/coursework_1+
+\item Checkout a new local branch from the fetched branch using\\
+  \verb+git checkout -b coursework_1 origin/mlp2020-21/coursework_1+
 \end{enumerate}
 
-You will now have a new branch in your local repository with all the
-code necessary for the coursework in it.   
+You will now have a new branch in your local repository with all the code necessary for the coursework in it.   
 
 This branch includes the following additions to your setup:
 
 \begin{itemize}
-	\item
-	A new \texttt{EMNISTDataProvider} class in the \verb+mlp.data_providers+ module.
+	\item A new \texttt{EMNISTDataProvider} class in the \verb+mlp.data_providers+ module.
 	This class makes some changes to the \texttt{MNISTDataProvider} class, linking to the \texttt{EMNIST Balanced} data, and setting the number of classes to 47.
-	\item
-	Training, validation, and test sets for the \texttt{EMNIST Balanced} dataset that
+	\item Training, validation, and test sets for the \texttt{EMNIST Balanced} dataset that
 	you will use in this coursework.
-	\item 
-	Four new classes in the \verb+mlp.layers+ module:\\
-	\texttt{LeakyReLULayer, PReLULayer, RandomReLULayer, ELULayer}.\\
-	These are  skeleton classes that you will need fully implement as part of the coursework (see Sections \ref{sec:activation-functions}).
-	\item 
-	One Jupyter notebook:\\
-	\texttt{ActivationFunction\_tests.ipynb} \\
-	to be used for testing the implementations of\texttt{LeakyReLULayer, PReLULayer, RandomReLULayer} and  \texttt{ELULayer}  (Sections \ref{sec:activation-functions}). The tests serve as a safeguard to prevent experimentation with faulty code which might lead to wrong conclusions. Tests in general are a \emph{vital} ingredient for good software development, and especially important for building correct and  efficient deep learning systems.
+	\item In order to further improve performance and mitigate the problem identified in neural networks, you will also need to implement a new class in the \verb+mlp.layers+ module:\\
+ 	\texttt{DropoutLayer}\\
+ 	and also two weight penalty tecniques in the \verb+mlp.penalties+ module:\\
+	\texttt{L1Penalty and L2Penalty}. 
+	\item \texttt{DropoutandPenalty\_tests.ipynb} Jupyter notebook\\
+	to be used for testing the implementations of {\texttt{{DropoutLayer}}}, {\texttt{L1Penalty and L2Penalty}} classes. The tests serve as a safeguard to prevent experimentation with faulty code which might lead to wrong conclusions. Tests in general are a \emph{vital} ingredient for good software development, and especially important for building correct and  efficient deep learning systems. 
 	
-	\item A directory called  \texttt{report} which contains the LaTeX template and style files for your report.  You should copy all these files into the directory which will contain your report.
+	\textbf{Please note} that passing these preliminary tests \textit{does not} necessarily mean your classes are absolutely bug-free. If you get unexpected curves during model training, re-check your implementation of the classes. 
+	
+	\item A directory called \texttt{report} which contains the LaTeX template and style files for your report.  You should copy all these files into the directory which will contain your report.
 \end{itemize}
 
 
@@ -99,98 +89,153 @@ This branch includes the following additions to your setup:
 \newpage
 \section{Tasks}
 \label{sec:tasks}
-The coursework is structured into 4 tasks, all supported by experiments on \texttt{EMNIST}
+The coursework is structured into 3 tasks, the first two are supported by experiments on \texttt{EMNIST} dataset. 
 \begin{enumerate}
-    \item Implementation of the activation functions Leaky ReLU, Parametric ReLU, Random ReLU and ELU.
-    \item Setting up a \textbf{baseline} system on \texttt{EMNIST}.
-    \item Exploration of the implemented activation functions.
-    \item A research investigation into whether non-linearities are necessary for fitting deep networks.
-    
-
+    \item Identification of a fundamental problem in machine learning as shown in Fig \ref{fig:errorfn} and setting up a \textbf{baseline} system on \texttt{EMNIST} by a valid hyper-parameter search. 
+   
+    \item A research investigation and analysis into whether using Dropout and/or Weight Penalty (\texttt{L1Penalty} and \texttt{L2Penalty}) addresses the problem found in training machine learning models (Fig \ref{fig:errorfn}). How do these two approaches improve/degrade the model's performance?
+    \item{A brief literature review of any one work as discussed in Section \ref{sec:part3}.}
 \end{enumerate}
 
-\subsection{Part 1: Implementing Activation Functions}\label{sec:activation-functions}
-In the first part of the assignment you will implement three further activation functions, each of which is related to ReLU. Each of these units defines an activation function for which $f(x)=x$ when $x>0$, as for ReLU, but avoid having a zero gradient when $x<0$.
-
-\textbf{Leaky ReLU, Random ReLU and PReLU} all share the same form of:
-
-\begin{equation} \label{eq: lrelu}
-f(x) = \left \{
-\begin{tabular}{cc}
-$x$ & if $x>0$  \\
-$\alpha x$ & otherwise
-\end{tabular}
-\right \}
-\end{equation}
-
-However, they differ in how the $\alpha$ variable is selected. 
-\begin{itemize}
-    \item In \textbf{Leaky ReLU} $\alpha$ is a single manually selected scalar value, usually in the range of $0.001 - 0.2$. 
-    \item In \textbf{Random ReLU} $\alpha$ is a vector of uniformly drawn scalar coefficients, usually ranging from $0.001 - 0.2$, each unit to be activated has its own unique $\alpha$. The $\alpha$ vector is uniformly drawn at every single forward propagation phase. 
-    \item In \textbf{PReLU} the $\alpha$ is a single learnable parameter usually initialized uniformly in the range $0.001 - 0.2$ and learned using backpropagation.
-    \item \textbf{ELU \cite{clevert2015fast}} has the following form:
-    
-    \begin{equation} \label{eq: elu}f(x) = \left \{
-    \begin{tabular}{cc}
-    $x$ & if $x>=0$  \\
-    $a(e^x - 1)$ & otherwise
-    \end{tabular}
-    \right \}
-    \end{equation} where $\alpha$ is a single manually selected positive scalar value.
-\end{itemize}
 
 
-Here are the steps to follow:
-\begin{enumerate}
-    \item Implement each of these activations function as classes \texttt{PReluLayer}, \texttt{LeakyReLULayer}, \texttt{RandomReLULayer} and \texttt{ELULayer}. You need to implement \texttt{fprop} and \texttt{bprop} methods for each class.
-    
-    \item Verify the correctness of your implementation using the supplied unit tests in \texttt{Activation\_Tests.ipynb}.
-    
-    \item Automatically  create  test outputs  \texttt{sxxxxxxx\_activation\_test\_pack.npz},   by  running  the  provided  program 
-    \texttt{scripts/generate\_activation\_layer\_test\_outputs.py} which uses your code for the previously mentioned layers to run your fprop and bprop and where necessary the \texttt{grads\_wrt\_params} methods for each layer on a unique test vector generated using your student 
-    ID number.
-    To do this part simply go to the scripts folder \texttt{scripts/} and then run \texttt{python generate\_activation\_layer\_test\_outputs.py --student\_id sxxxxxxx} replacing the student id with yours. A file called \texttt{sxxxxxxx\_activation\_test\_pack.npz} will be generated under data which you need to submit with your report.
-    
-\end{enumerate}
-
-For Part 1 of the coursework you need to submit the test files \texttt{sxxxxxxx\_activation\_test\_pack.npz} (where \texttt{sXXXXXXX} is replaced with your student number) created in step 3 above.
-
-In your report you should thoroughly define and analyse each activation function.
-
-\emph{(30 Marks)}
-
-\subsection{Baseline}
+\section{Task 1: Problem identification}
 \label{sec:baseline}
-Initially you need to establish a baseline system on \texttt{EMNIST} using stochastic gradient descent (SGD) and without explicit regularization.  Carry out experiments using 32, 64 and 128 ReLU hidden units per layer, and investigate using from 1-3 hidden layers.  Make sure you  use an appropriate learning rate. Train for 100 epochs. For the initial experiments, compare systems using the test set accuracy. For model selection, you are free to use early stopping or the best validation model. 
+
+
+\begin{figure}
+% \begin{center}
+\centering
+
+\begin{subfigure}{.8\textwidth}
+\centering
+
+\includegraphics[width=0.75\linewidth]{error_IHO_withrelu.png}
+\caption{Error curve on the training and validation set of EMNIST dataset.} 
+\label{fig:error}
+\end{subfigure}
+% \end{center}
+% \begin{center}
+\centering
+
+\begin{subfigure}{.8\textwidth}
+\centering
+
+\includegraphics[width=0.8\linewidth]{accuracy_IHO_withrelu.png}
+\caption{Accuracy curve on the training and validation set of EMNIST dataset.}
+
+\label{fig:accuracy}
+\end{subfigure}
+\caption{Error and Accuracy curves for a baseline model on EMNIST Dataset.}
+\label{fig:errorfn}
+
+\end{figure}
+
+Figure~\ref{fig:errorfn} shows the training and validation error curves in Figure~\ref{fig:error} and also training and validation accuracies in Figure~\ref{fig:accuracy} for a model with 1 hidden layer and a ReLU activation function trained on the EMNIST dataset by using cross-entropy error function. 
+This curve can be re-produced by running the model settings defined in the \texttt{Coursework1.ipynb} notebook in the github repository.
+First identify and discuss the problem shown by the curves in Figure~\ref{fig:errorfn} and briefly discuss potential solutions in this section for overcoming this problem.
+
+\textbf{Varying number of hidden units.} Initially you will train various 1-hidden layer networks by using either 32, 64 and 128 ReLU hidden units per layer on \texttt{EMNIST} using stochastic gradient descent (SGD) without any regularization.
+Make sure you use an appropriate learning rate and train each network for 100 epochs.
+Visualise and discuss how increasing number of hidden units affects the validation performance and whether it worsens or mitigates the problem. 
+
+\emph{(10 Marks)}
+% Initially you need to establish a baseline system on \texttt{EMNIST} using stochastic gradient descent (SGD) and without explicit regularization.
+% Design different models by varying number of ReLU hidden units per layer and number of layers.
+% Carry out experiments using 32, 64 and 128 ReLU hidden units per layer, and investigate using from 1-3 hidden layers. 
+%Make sure you use an appropriate learning rate. 
+% Train for 100 epochs. For model selection, you are free to use early stopping to choose the best validation model. Compare systems using the test set accuracy on the model selected above. 
+
+\textbf{Varying number of layers.} Here you will train various neural networks by using either 1, 2, 3 hidden layers with 128 ReLU hidden units per layer on \texttt{EMNIST} using stochastic gradient descent (SGD) without any regularization.
+Make sure you use an appropriate learning rate and train each network for 100 epochs.
+Visualise and discuss how increasing number of layers affects the validation performance and whether it worsens or mitigates the problem.
 
 \emph{(10 Marks)}
 
-\subsection{Part 2: EMNIST Experiments}
+
+
+
+\section{Task 2: Mitigating the problem with Dropout and Weight Penalty}
 \label{sec:part2}
-For the experiments going forward you should use a standard architecture to compare the different algorithms that you explore: it is recommended that you use 3 hidden layers and 128 hidden units.
 
-In Part 2 of the coursework you will experiment with \texttt{PReluLayer}, \texttt{LeakyReLULayer}, \texttt{RandomReLULayer} and \texttt{ELULayer} in multi-layer networks trained on EMNIST. 
+\textbf{Definition and Motivation. } Here you will explain 
+\begin{itemize}
+    \item \texttt{Dropout Layer}, \texttt{L1Penalty} and \texttt{L2Penalty} including their formulations and implementation details (do not copy/paste your code here),
+    \item how/why/to what extent each one can alleviate the problem above,
+    \item how they differ from each other in theory.
+\end{itemize}
+These explanations must be \textbf{in your own words}.
 
-\textbf{Part 2A: Comparing activation functions.}
-You should modify your baseline network to one that uses one of each of the above activation functions and train a model for 
-Your main aim is to compare the generalization performance of each of these activation functions as well as discover the best possible network configuration, when the only available options to choose from are the activation functions and their hyper-parameters. Ensure that you thoroughly describe the relationships between each of the activation functions in your report, ideally both at the theoretical and empirical level. \textbf{Note that the expected amount of work in this part is not a brute-force exploration of all possible variations of network configurations and hyperparameters but a carefully designed set of experiments that provides meaningful analysis and insights.}
+\emph{(10 Marks)}
+\vspace{0.2cm}
+
+\textbf{Implementing Dropout and Weight Penalty.}
+Here you will implement \texttt{DropoutLayer}, \texttt{L1Penalty} and \texttt{L2Penalty} and test their correctness.  
+Here are the steps to follow:
+\begin{enumerate}
+    \item Implement the Dropout class in the \texttt{DropoutLayer} of the \verb+mlp.layers+ module. You need to implement \texttt{fprop} and \texttt{bprop} methods for this class.
+    \item Implement the L1Penalty and L2Penalty class in the \texttt{L1Penalty} and \texttt{L2Penalty} of the \verb+mlp.penalties+ module. You need to implement \texttt{\_\_call\_\_} and \texttt{grad} methods for this class. 
+    After defining these functions, they can be provided as a parameter, \texttt{weights\_penalty, biases\_penalty} in the \texttt{AffineLayer} class while creating the multi-layer neural network. 
+    \item Verify the correctness of your implementation using the supplied unit tests in \\ \texttt{DropoutandPenalty\_tests.ipynb} 
+    \item Automatically  create  test outputs  \texttt{xxxxxxx\_regularization\_test\_pack.npy},   by  running  the  provided  program 
+    \texttt{scripts/generate\_regularization\_layer\_test\_outputs.py} which uses your code for the previously mentioned layers to run your fprop, bprop, \texttt{\_\_call\_\_} and \texttt{grad} methods where necessary for each layer on a unique test vector generated using your student 
+    ID number.
+    
+    To do this part simply go to the scripts folder \texttt{scripts/} and then run \\ \texttt{python generate\_regularization\_layer\_test\_outputs.py -{}-student\_id sxxxxxxx} replacing the student id with yours. A file called \texttt{xxxxxxx\_regularization\_test\_pack.npy} will be generated under data which you need to submit with your report.
+\end{enumerate}
+
+\emph{(20 Marks)}
+\vspace{0.2cm}
+
+\textbf{EMNIST Experiments.}
+In this section you should modify your baseline network to one that uses one or a combination of \texttt{DropoutLayer} with either \texttt{L1Penalty} or \texttt{L2Penalty} and train a model. 
+For the experiments, your baseline network should contain 3 hidden layers and 128 hidden units with ReLU activation function.
+Your main aim is to i) investigate whether/how each of these functions addresses the above mentioned problem, ii)
+study the generalization performance of your network when used with one of these functions or a combination of them, iii) discover the best possible network configuration, when the only available options to choose from are Dropout and Weight Penalty functions and the hyper-parameters (learning rate, Dropout Probability and \texttt{penalty coefficient} for the Weight Penalty functions). 
+
+The Dropout probability is a float value in the range (0,1), \textit{e.g.} 0.5, chosen manually. Penalty coefficient is also a manually selected float value, \textit{e.g.} 0.001, usually in the range of $0.1 - 0.00001$ .  
+\textbf{For model selection, you should use validation performance to pick the best model and finally report test performance of the best model.}
+
+
+Ensure that you thoroughly describe how these functions affect performance when used together and separately with different hyperparameters in your report, ideally both at the theoretical and empirical level. 
+\textbf{Note that the expected amount of work in this part is not a brute-force exploration of all possible variations of network configurations and hyperparameters but a carefully designed set of experiments that provides meaningful analysis and insights.}
 
 \emph{(40 Marks)}
 
-\textbf{Part 2B: Linear vs Non-Linear activations.}
-In this section you will need to set up an experiment to explore whether non-linear activation functions are necessary for fitting deep neural networks on large datasets. A linear activation function is effectively the output of a fully connected layer without an activation applied to it. Design, implement and run an experiment that can showcase whether non-linear activation functions are helpful and/or necessary for successful training. Furthermore, provide theoretical and practical intuitions as to why this is the case.
+\section{Task 3: Literature Review}
+\label{sec:part3}
 
-\emph{(20 Marks)}
+In this section, you will explore one related work in the research area of regularization methods. You should discuss the summary of the paper, strengths and limitations of the research work in less than \textbf{ 500 words}. Note that this review must be \textbf{in your own words}. 
+
+Below is a list of papers that you are recommended to consider for selecting one paper. If for any particular reason, you do not wish to choose from the given list, you are free to discuss any other paper which relates this coursework and is a published work in AI/ML/CV/NLP conferences such as ICML, NeurIPS, ICLR, AAAI, IJCAI, CVPR, ECCV, ICCV, EMNLP or ACL. This is not an exhaustive list of conferences but largely covers most of them. 
+
+
+%  Your review should be succinct and sufficient for the reader to understand the essence of the chosen work. 
+
+% Add refs for
+\begin{itemize} 
+    \item Dropout: a simple way to prevent neural networks from overfitting, \cite{srivastava2014dropout}.
+    \item Maxout Networks, \cite{goodfellow2013maxout}.
+    \item Understanding deep learning requires rethinking generalization, \cite{zhang2016understanding}.
+\end{itemize}
+
+\emph{(10 Marks)}
+
 %\newpage
 \section{Report}
 \label{sec:report}
-Your coursework will be primarily assessed based on your submitted report.
+Your coursework will be primarily assessed based on your submitted report. 
 
-The directory \verb+coursework_1/report+ contains a template for your report (\verb+mlp-cw1-template.tex+);  the generated pdf file (\verb+mlp-cw1-template.pdf+) is also provided, and you should read this file carefully as it contains some useful information about the required structure and content. The template is written in LaTeX, and we strongly recommend that you write your own report using LaTeX, using the supplied document style \verb+mlp2019+ (as in the template).
+The report template is divided into sections which corresponds to each task in the coursework specs, especially from Section 2 to Section 5 of the report. The Abstract, Introduction and Conclusion sections \textit{will not be graded} for the final marks but we highly encourage you to attempt them in the report as we will provide feedback on them. Please note that these sections will be graded in the later courseworks, hence it is beneficial to take the feedback on coursework 1 into serious account.
+
+
+The directory \verb+coursework_1/report+ contains a template for your report (\verb+mlp-cw1-template.tex+);  the generated pdf file (\verb+mlp-cw1-template.pdf+) is also provided, and you should read this file carefully as it contains some useful information about the required structure and content. The template is written in LaTeX, and we strongly recommend that you write your own report using LaTeX, using the supplied document style \verb+mlp2020+ (as in the template).
 
 You should copy the files in the \verb+report+ directory to the directory containing the LaTeX file of your report, as \verb+pdflatex+ will need to access these files when building the pdf document from the LaTeX source file.
 
 Your report should be in a 2-column format, based on the document format used for the ICML conference. The report should be a \textbf{maximum of 5 pages long}, not including references.  We will not read or assess any parts of the report beyond this limit.
+
+
 
 Ideally, all figures should be included in your report file as
 \href{https://en.wikipedia.org/wiki/Vector_graphics}{vector graphics files}
@@ -233,9 +278,7 @@ is given below.
 \end{Shaded}
 
 
-If you make use of any any books, articles, web pages or other resources
-you should appropriately cite these in your report. You do not need to
-cite material from the course lecture slides or lab notebooks.
+If you make use of any any books, articles, web pages or other resources you should appropriately cite these in your report. You do not need to cite material from the course lecture slides or lab notebooks.
 
 To create a pdf file \verb+mlp-cw1-template.pdf+ from a LaTeX source file (\verb+mlp-cw1-template.tex+), you can run the following in a terminal:
 \begin{verbatim}
@@ -285,7 +328,7 @@ Please be aware that late submissions may receive lower priority for
 marking, and marks may not be returned within the same timeframe as
 for on-time submissions.
 
-{\em Warning:} Unfortunately the \verb+submit+ command will technically
+{\em Warning:} Unfortunately the submission system on Learn will technically
 allow you to submit late even if you submitted before the deadline
 (i.e.\ it does not enforce the above policy). Don't do this! We will
 mark the version that we retrieve just after the deadline.
@@ -338,54 +381,38 @@ your work as described above.
 \subsection{Submission}
 \label{sec:submission}
 
-Your coursework submission should be done electronically using the
-\href{http://computing.help.inf.ed.ac.uk/submit}{\texttt{submit}}
-command available on DICE machines.
+Your coursework submission should be done online on the \href{https://www.learn.ed.ac.uk/}{Learn} course webpage.
 
-Your submission should include
+Your submission should include one zip file \texttt{sxxxxxxx.zip} that should contain
 
 \begin{itemize}
 
   %generated for part 1, \verb+sXXXXXXX_batchnorm_test_file.txt+ and\\ \verb+sXXXXXXX_conv_test_file.txt+, where your student number replaces \verb+sXXXXXXX+.  Please do not   change the names of these files.
-\item Your test outputs \texttt{sxxxxxxx\_activation\_test\_pack.npz}. Which can be generated by implementing the previously mentioned classes, going into \texttt{scripts/} and running \texttt{python generate\_activation\_layer\_test\_outputs.py --student\_id sxxxxxxx} replacing the student id with yours. A file called \texttt{sxxxxxxx\_activation\_test\_pack.npz} will be generated under data which you need to submit with your report.
+\item Your test outputs \texttt{xxxxxxx\_regularization\_test\_pack.npy}. which can be generated by implementing the previously mentioned classes, going into \texttt{scripts/} and running \texttt{python generate\_regularization\_layer\_test\_outputs.py -{}-student\_id sxxxxxxx} replacing the student id with yours. A file called \texttt{xxxxxxx\_regularization\_test\_pack.npy} will be generated under data which you need to submit with your report and the code.
 \item
-  your completed report as a PDF file, using the provided template
+  your completed report as a PDF file renamed as \texttt{sxxxxxxx\_report.pdf}, using the provided template
 \item
   your local version of the \texttt{mlp} code including any changes
-  you made to the modules (\texttt{.py} files)
+  you made to the modules (\texttt{.py} files) and the \texttt{Coursework\_1.ipynb} notebook.   
 \end{itemize}
 Please do not submit anything else (e.g. log files).
 
-You should copy all of the files to a single directory, \verb+coursework1+, e.g.
+You can use this command on Linux machines to zip all the files together - 
 
-\begin{verbatim}
-mkdir coursework1
-cp reports/coursework1.pdf coursework1
-\end{verbatim}
-%cp sXXXXXXX_batchnorm_test_file.txt sXXXXXXX_conv_test_file.txt 
+\texttt{zip sxxxxxxx.zip mlp/  \texttt{Coursework\_1.ipynb} sxxxxxxx\_report.pdf \\ xxxxxxx\_regularization\_test\_pack.npy}
 
+Replace \texttt{sxxxxxxx} with your student id. 
 
-and then submit this directory using
+Once you have successfully created the .zip file, you need to login to your Learn \texttt{Machine Learning Practical (2020-2021)[YR]} webpage and submit the file. 
+\begin{itemize}
+    \item Migrate to the section \textbf{Coursework} on the left column on the course page. 
+    \item Click on Coursework 1.% and then on Submit Coursework. Pavlos: The folder will be replaced with the assignment item "Coursework 1" itself (no need for all the nesting). I'll edit this.
+    \item A page will appear where you will need to browse and upload your .zip file that you created previously in \texttt{Attach Files} and then click \textbf{Submit}. 
+\end{itemize}
 
-\begin{verbatim}
-submit mlp cw1 coursework1
-\end{verbatim}
+You can amend an existing submission by attaching a different .zip file using the Attach Files option and then Submit again.
 
-\textbf{Please submit the directory, not a zip file, not a tar file.}
-
-The \texttt{submit} command will prompt you with the details of the
-submission including the name of the files / directories you are
-submitting and the name of the course and exercise you are submitting
-for and ask you to check if these details are correct. You should check
-these carefully and reply \texttt{y} to submit if you are sure the files
-are correct and \texttt{n} otherwise.
-
-You can amend an existing submission by rerunning the \texttt{submit}
-command any time up to the deadline. It is therefore a good idea
-(particularly if this is your first time using the DICE submit
-mechanism) to do an initial run of the \texttt{submit} command early on
-and then rerun the command if you make any further updates to your
-submission rather than leaving submission to the last minute.
+\textbf{Note that we will only mark the last uploaded coursework in case you amend your files. Thus it is your responsibility to make sure that correct files are uploaded.}
 
 \newpage
 \section{Marking Guidelines}

@@ -1,111 +1,80 @@
 # from mlp.learning_rules import AdamLearningRuleWithWeightDecay
 # from mlp.schedulers import CosineAnnealingWithWarmRestarts
-from mlp.layers import LeakyReluLayer, ParametricReluLayer, RandomReluLayer, ExponentialLinearUnitLayer
+from mlp.layers import DropoutLayer
+from mlp.penalties import L1Penalty, L2Penalty
 import numpy as np
 import os
 
 
-def test_leaky_relu():
+
+def test_dropout_layer():
     # loaded = np.load("../data/correct_results.npz")
     rng = np.random.RandomState(92019)
-
+    
     x = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
 
-    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'activation_debug_pack.npy'), allow_pickle=True).item()
-
-    layer = LeakyReluLayer()
+    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'regularization_debug_pack.npy'), allow_pickle=True).item()
+    
+    rng = np.random.RandomState(92019)
+    layer = DropoutLayer(rng=rng)
 
     out = layer.fprop(x)
 
     grads = layer.bprop(inputs=x, outputs=out, grads_wrt_outputs=np.ones(x.shape))
 
-    correct_outputs = correct_outputs['leaky_relu']
+#     correct_outputs = correct_outputs['dropout']
 
-    fprop_test = np.allclose(correct_outputs['fprop_correct'], out)
+    fprop_test = np.allclose(correct_outputs['DropoutLayer_fprop'], out)
 
-    bprop_test = np.allclose(correct_outputs['grad_correct'], grads)
+    bprop_test = np.allclose(correct_outputs['DropoutLayer_bprop'], grads)
 
-    return fprop_test, out, correct_outputs['fprop_correct'], bprop_test, grads, correct_outputs['grad_correct']
+    return fprop_test, out, correct_outputs['DropoutLayer_fprop'], bprop_test, grads, correct_outputs['DropoutLayer_bprop']
 
 
-def test_random_relu():
+def test_L1_Penalty():
+    
+
     rng = np.random.RandomState(92019)
-
+    
     x = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
 
-    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'activation_debug_pack.npy'), allow_pickle=True).item()
+    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'regularization_debug_pack.npy'), allow_pickle=True).item()
+    
+    layer = L1Penalty(1e-4)
 
-    layer = RandomReluLayer()
+    out = layer(x)
 
-    # testing custom leakiness passed in fprop
+    grads = layer.grad(x)
 
-    out = layer.fprop(x, leakiness=correct_outputs['random_relu']['leakiness'])
+#     correct_outputs = correct_outputs['l1penalty']
 
-    grads = layer.bprop(inputs=x, outputs=out, grads_wrt_outputs=np.ones(x.shape))
+    __call__test = np.allclose(correct_outputs['L1Penalty___call__correct'], out)
 
-    correct_outputs = correct_outputs['random_relu']
+    grad_test = np.allclose(correct_outputs['L1Penalty_grad_correct'], grads)
 
-    fprop_test = np.allclose(correct_outputs['fprop_correct'], out)
+    return __call__test, out, correct_outputs['L1Penalty___call__correct'], grad_test, grads, correct_outputs['L1Penalty_grad_correct']
 
-    bprop_test = np.allclose(correct_outputs['grad_correct'], grads)
 
-    # testing rng generated leakiness
+def test_L2_Penalty():
+    
 
     rng = np.random.RandomState(92019)
-
-    x_rng_leak = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
-
-    layer = RandomReluLayer(rng=rng)
-
-    out_rng_leak = layer.fprop(x_rng_leak)
-    grads_rng_leak = layer.bprop(x_rng_leak, out_rng_leak, grads_wrt_outputs=np.ones(x.shape))
-
-    fprop_test_rng_leak = np.allclose(correct_outputs['fprop_correct_rng_leakiness'], out_rng_leak)
-
-    bprop_test_rng_leak = np.allclose(correct_outputs['bprop_correct_rng_leakiness'], grads_rng_leak)
-
-    return fprop_test, out, correct_outputs['fprop_correct'], bprop_test, grads, correct_outputs['grad_correct'], fprop_test_rng_leak, out_rng_leak, correct_outputs['fprop_correct_rng_leakiness'], bprop_test_rng_leak, grads_rng_leak, correct_outputs['bprop_correct_rng_leakiness']
-
-
-
-def test_parametric_relu():
-    # loaded = np.load("../data/correct_results.npz")
-    rng = np.random.RandomState(92019)
+    
     x = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
 
-    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'activation_debug_pack.npy'), allow_pickle=True).item()
+    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'regularization_debug_pack.npy'), allow_pickle=True).item()
+    
+    layer = L2Penalty(1e-4)
 
-    layer = ParametricReluLayer(alpha=0.25)
-    out = layer.fprop(x.copy())
-    grads = layer.bprop(inputs=x, outputs=out, grads_wrt_outputs=np.ones(x.shape))
-    grad_wrt_param = layer.grads_wrt_params(inputs=x, grads_wrt_outputs=np.ones(x.shape))
+    out = layer(x)
 
-    correct_outputs = correct_outputs['prelu']
+    grads = layer.grad(x)
 
-    fprop_test = np.allclose(correct_outputs['fprop_correct'], out)
+#     correct_outputs = correct_outputs['l2penalty']
 
-    bprop_test = np.allclose(correct_outputs['grad_correct'], grads)
+    __call__test = np.allclose(correct_outputs['L2Penalty___call__correct'], out)
 
-    grad_wrt_param_test = np.allclose(correct_outputs['grad_param'], grad_wrt_param)
+    grad_test = np.allclose(correct_outputs['L2Penalty_grad_correct'], grads)
 
-    return fprop_test, out, correct_outputs['fprop_correct'], bprop_test, grads, correct_outputs['grad_correct'], \
-           grad_wrt_param_test, grad_wrt_param, correct_outputs['grad_param']
+    return __call__test, out, correct_outputs['L2Penalty___call__correct'], grad_test, grads, correct_outputs['L2Penalty_grad_correct']
 
-
-def test_exponential_linear_unit():
-    rng = np.random.RandomState(92019)
-    x = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
-
-    correct_outputs = np.load(os.path.join(os.environ['MLP_DATA_DIR'], 'activation_debug_pack.npy'), allow_pickle=True).item()
-
-    layer = ExponentialLinearUnitLayer()
-    out = layer.fprop(x)
-    grads = layer.bprop(inputs=x, outputs=out, grads_wrt_outputs=np.ones(x.shape))
-
-    correct_outputs = correct_outputs['elu']
-
-    fprop_test = np.allclose(correct_outputs['fprop_correct'], out, rtol=1e-3, atol=1e-6)
-
-    bprop_test = np.allclose(correct_outputs['grad_correct'], grads, rtol=1e-3, atol=1e-6)
-
-    return fprop_test, out, correct_outputs['fprop_correct'], bprop_test, grads, correct_outputs['grad_correct']
