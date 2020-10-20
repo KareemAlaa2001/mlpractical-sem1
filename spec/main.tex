@@ -131,7 +131,7 @@ The coursework is structured into 3 tasks, the first two are supported by experi
 
 \end{figure}
 
-Figure~\ref{fig:errorfn} shows the training and validation error curves in Figure~\ref{fig:error} and also training and validation accuracies in Figure~\ref{fig:accuracy} for a model with 1 hidden layer and a ReLU activation function trained on the EMNIST dataset by using cross-entropy error function. 
+Figure~\ref{fig:errorfn} shows the training and validation error curves in Figure~\ref{fig:error} and also training and validation accuracies in Figure~\ref{fig:accuracy} for a model with 1 hidden layer\footnote{\textit{A hidden layer is AffineLayer+ReLULayer together.}} and a ReLU activation function trained on the EMNIST dataset by using cross-entropy error function. 
 This curve can be re-produced by running the model settings defined in the \texttt{Coursework1.ipynb} notebook in the github repository.
 First identify and discuss the problem shown by the curves in Figure~\ref{fig:errorfn} and briefly discuss potential solutions in this section for overcoming this problem.
 
@@ -173,7 +173,7 @@ These explanations must be \textbf{in your own words}.
 Here you will implement \texttt{DropoutLayer}, \texttt{L1Penalty} and \texttt{L2Penalty} and test their correctness.  
 Here are the steps to follow:
 \begin{enumerate}
-    \item Implement the Dropout class in the \texttt{DropoutLayer} of the \verb+mlp.layers+ module. You need to implement \texttt{fprop} and \texttt{bprop} methods for this class.
+    \item Implement the Dropout class in the \texttt{DropoutLayer} of the \verb+mlp.layers+ module. You need to implement \texttt{fprop} and \texttt{bprop} methods for this class. Please note that the sample distribution to be used for Dropout implementation is a uniform distribution, U(0,1) to pass the unit tests. 
     \item Implement the L1Penalty and L2Penalty class in the \texttt{L1Penalty} and \texttt{L2Penalty} of the \verb+mlp.penalties+ module. You need to implement \texttt{\_\_call\_\_} and \texttt{grad} methods for this class. 
     After defining these functions, they can be provided as a parameter, \texttt{weights\_penalty, biases\_penalty} in the \texttt{AffineLayer} class while creating the multi-layer neural network. 
     \item Verify the correctness of your implementation using the supplied unit tests in \\ \texttt{DropoutandPenalty\_tests.ipynb} 
