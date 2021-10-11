@@ -97,7 +97,7 @@ class MNISTDataProvider(DataProvider):
     def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
                  shuffle_order=True, rng=None):
         """Create a new MNIST data provider object.
-
+        
         Args:
             which_set: One of 'train', 'valid' or 'eval'. Determines which
                 portion of the MNIST data this object should provide.
@@ -110,6 +110,7 @@ class MNISTDataProvider(DataProvider):
                 the data before each epoch.
             rng (RandomState): A seeded random number generator.
         """
+        print("triggered the MNISTDataProvider constructor")
         # check a valid which_set was provided
         assert which_set in ['train', 'valid', 'eval'], (
             'Expected which_set to be either train, valid or eval. '
@@ -133,17 +134,18 @@ class MNISTDataProvider(DataProvider):
         super(MNISTDataProvider, self).__init__(
             inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
 
-    # def next(self):
-    #    """Returns next data batch or raises `StopIteration` if at end."""
-    #    inputs_batch, targets_batch = super(MNISTDataProvider, self).next()
-    #    return inputs_batch, self.to_one_of_k(targets_batch)
-    #
+    def next(self):
+       """Returns next data batch or raises `StopIteration` if at end."""
+       print("triggered uncommented next method")
+       inputs_batch, targets_batch = super(MNISTDataProvider, self).next()
+       return inputs_batch, self.to_one_of_k(targets_batch)
+    
     def __next__(self):
         return self.next()
 
     def to_one_of_k(self, int_targets):
+        print("triggered to one of k")
         """Converts integer coded class target to 1 of K coded targets.
-
         Args:
             int_targets (ndarray): Array of integer coded class targets (i.e.
                 where an integer from 0 to `num_classes` - 1 is used to
@@ -156,8 +158,13 @@ class MNISTDataProvider(DataProvider):
             to zero except for the column corresponding to the correct class
             which is equal to one.
         """
-        raise NotImplementedError()
+        num_classes = 10
+        targets = np.array(int_targets).reshape(-1)
+        return np.eye(num_classes)[targets]
 
+    def get_one_hot(targets, nb_classes):
+        res = np.eye(nb_classes)[np.array(targets).reshape(-1)]
+        return res.reshape(list(targets.shape)+[nb_classes])
 
 class MetOfficeDataProvider(DataProvider):
     """South Scotland Met Office weather data provider."""
@@ -187,6 +194,8 @@ class MetOfficeDataProvider(DataProvider):
         assert os.path.isfile(data_path), (
             'Data file does not exist at expected path: ' + data_path
         )
+
+        # rawinputs = np.loadtxt()
         # load raw data from text file
         # ...
         # filter out all missing datapoints and flatten to a vector
@@ -200,7 +209,7 @@ class MetOfficeDataProvider(DataProvider):
         # targets are last entry in windows
         # targets = ...
         # initialise base class with inputs and targets arrays
-        # super(MetOfficeDataProvider, self).__init__(
-        #     inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
+        super(MetOfficeDataProvider, self).__init__(
+            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
     def __next__(self):
             return self.next()
