@@ -1,15 +1,26 @@
-%% Template for MLP Coursework 1 / 19 October 2019 
+%% Template for MLP Coursework 1 / 19 October 2021 
 
 %% Based on  LaTeX template for ICML 2017 - example_paper.tex at 
 %%  https://2017.icml.cc/Conferences/2017/StyleAuthorInstructions
 
 \documentclass{article}
-\input{mlp2020_includes}
+\input{mlp2021_includes}
 
-%% You probably do not need to change anything above this comment
 
-%% REPLACE this with your student number
-\def\studentNumber{sXXXXXXX}
+\definecolor{red}{rgb}{0.95,0.4,0.4}
+\definecolor{blue}{rgb}{0.4,0.4,0.95}
+\definecolor{orange}{rgb}{1, 0.65, 0}
+
+\newcommand{\youranswer}[1]{{\color{red} \bf[#1]}} %your answer: 
+
+
+%% START of YOUR ANSWERS
+\input{mlp-cw1-questions}
+%% END of YOUR ANSWERS
+
+
+
+%% Do not change anything in this file. Add your answers to mlp-cw1-questions.tex
 
 
 
@@ -22,126 +33,263 @@
 ]
 
 \begin{abstract} 
-The abstract should be 100--200 words long,  providing a concise summary of the contents of your report.
+In this report we study the problem of overfitting, which is \questionOne.
+We first analyse the given example and discuss the probable causes of the underlying problem. 
+Then we investigate how the depth and width of a neural network
+can affect overfitting in a feedforward architecture and observe that increasing width and depth \questionTwo.
+Next we discuss why two standard methods, Dropout and Weight Penalty, can
+mitigate overfitting, then describe their implementation and use them in our experiments
+to reduce the overfitting on the EMNIST dataset. 
+Based on our results, we ultimately find that \questionThree.
+Finally, we briefly review another method, Maxout, discuss its strengths and weaknesses, and conclude the report with our observations and future work. Our main findings indicate that \questionFour.
 \end{abstract} 
 
 \section{Introduction}
 \label{sec:intro}
-This document provides a template for the MLP coursework 1 report.  The template structures the report into sections, which you are recommended to use, but can change if you wish.  If you want to use subsections within a section that is fine, but please do not use any deeper structuring.  In this template the text in each section will include an outline of what you should include in each section, along with some practical LaTeX examples (for example figures, tables, algorithms).  Your document must be no longer than \textbf{five pages},  with an additional page (or more!) allowed for references.
+In this report we focus on a common and important problem while training machine learning models known as overfitting, or overtraining, which is \questionOne.
+We first start with analyzing the given problem in Fig.~\ref{fig:example}, study it in different architectures and then investigate different strategies to mitigate the problem.
+In particular, Section \ref{sec:task1} identifies and discusses the given problem, and investigates the effect of network width and depth in terms of generalization gap (see Ch.~5 in \citealt{Goodfellow-et-al-2016}) and generalization performance.
+Section \ref{sec:task2.1} introduces two regularization techniques to alleviate overfitting: Dropout \cite{srivastava2014dropout} and L1/L2 Weight Penalties (see Section~7.1 in \citealt{Goodfellow-et-al-2016}). 
+We first explain them in detail and discuss why they are used for alleviating overfitting.
+In Section~\ref{sec:task2.2} we incorporate each of them and their various combinations to a three hidden layer neural network, train it on the EMNIST dataset, which contains 131,600 images of characters and digits, each of size 28x28 which are split into 47 classes, grouping together some difficult to distinguish characters.
+We evaluate them in terms of generalization gap and performance, and discuss the results and effectiveness of the tested regularization strategies.
+Our results show that \questionThree.
+In Section~\ref{sec:task3}, we discuss a related work on Maxout Networks and highlight its pros and cons.\footnote{Instructor note: Omitting this for this coursework, but normally you would be more specific and summarise your conclusions about that review here as well.}
+Finally, we conclude our study in section \ref{sec:concl}, noting that \questionFour.
 
-The introduction should place your work in context, giving the overall motivation for the work, and clearly outlining the research questions you have explored -- in this case questions arising from an investigation of shallow and deep neural network models, hyper-parameter variations, and regularization/weight penalty.  This section should also include a concise description of the Balanced EMNIST task and data -- be precise: for example state the size of the training, validation, and test sets.
 
 \section{Problem identification}
-In this section you should discuss in detail and in your own words the problem identified in Figure 1 of the coursework specs. You also need to discuss ``why'' and ``how'' this problem occurs and ``what'' you can do to solve the problem. Following this discussion, you will report your baseline experiments for EMNIST by varying hidden unit sizes and the number of hidden layers. No need for theoretical explanations of things covered in the course, but if you go beyond what was covered please explain what you did with references to relevant paper(s) if appropriate.  
+\label{sec:task1}
 
-In this section you should aim to cover both the ``what'' and the ``why'': \emph{what} you did, giving sufficient information (hyperparameter settings, etc.) so that someone else (e.g. another student on the course) could reproduce your results; and \emph{why} you performed the experiments you are reporting - what you are aiming to discover what is the motivation for the particular experiments you undertook. You should also provide some discussion and interpretation of your results and if these experiments worsen or mitigate the problem discussed above.  
-
-Your experimental sections should include graphs (for instance, figure~\ref{fig:sample-graph}) and/or tables (for instance, table~\ref{tab:sample-table})\footnote{These examples were taken from the ICML template paper.}, using the \verb+figure+ and \verb+table+ environments, in which you use \verb+\includegraphics+ to include an image (pdf, png, or jpg formats).  Please export graphs as 
-\href{https://en.wikipedia.org/wiki/Vector_graphics}{vector graphics}
-rather than \href{https://en.wikipedia.org/wiki/Raster_graphics}{raster
-files} as this will make sure all detail in the plot is visible.
-Matplotlib supports saving high quality figures in a wide range of
-common image formats using the
-\href{http://matplotlib.org/api/pyplot_api.html\#matplotlib.pyplot.savefig}{\texttt{savefig}}
-function. \textbf{You should use \texttt{savefig} rather than copying
-the screen-resolution raster images outputted in the notebook.} An
-example of using \texttt{savefig} to save a figure as a PDF file (which
-can be included as graphics in a \LaTeX document is given in the coursework document.
-
-If you need a figure or table to stretch across two columns use the \verb+figure*+ or \verb+table*+ environment instead of the \verb+figure+ or \verb+table+ environment.  Use the \verb+subfigure+ environment if you want to include multiple graphics in a single figure.
-
-\begin{figure}[tb]
-\vskip 5mm
-\begin{center}
-\centerline{\includegraphics[width=\columnwidth]{icml_numpapers}}
-\caption{Historical locations and number of accepted papers for International
-  Machine Learning Conferences (ICML 1993 -- ICML 2008) and
-  International Workshops on Machine Learning (ML 1988 -- ML
-  1992). At the time this figure was produced, the number of
-  accepted papers for ICML 2008 was unknown and instead estimated.}
-\label{fig:sample-graph}
-\end{center}
-\vskip -5mm
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{\linewidth}
+        \includegraphics[width=\linewidth]{figures/accuracy_IHO_withrelu.png}
+        \caption{accuracy by epoch}
+        \label{fig:example_acccurves}
+    \end{subfigure} 
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/error_IHO_withrelu.png}
+        \caption{error by epoch}
+        \label{fig:example_errorcurves}
+    \end{subfigure} 
+    \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for the baseline model.}
+    \label{fig:example}
 \end{figure} 
 
-\begin{table}[tb]
-\vskip 3mm
-\begin{center}
-\begin{small}
-\begin{sc}
-\begin{tabular}{lcccr}
-\hline
-\abovespace\belowspace
-Data set & Naive & Flexible & Better? \\
-\hline
-\abovespace
-Breast    & 95.9$\pm$ 0.2& 96.7$\pm$ 0.2& $\surd$ \\
-Cleveland & 83.3$\pm$ 0.6& 80.0$\pm$ 0.6& $\times$\\
-Glass2    & 61.9$\pm$ 1.4& 83.8$\pm$ 0.7& $\surd$ \\
-Credit    & 74.8$\pm$ 0.5& 78.3$\pm$ 0.6&         \\
-Horse     & 73.3$\pm$ 0.9& 69.7$\pm$ 1.0& $\times$\\
-Meta      & 67.1$\pm$ 0.6& 76.5$\pm$ 0.5& $\surd$ \\
-Pima      & 75.1$\pm$ 0.6& 73.9$\pm$ 0.5&         \\
-\belowspace
-Vehicle   & 44.9$\pm$ 0.6& 61.5$\pm$ 0.4& $\surd$ \\
-\hline
-\end{tabular}
-\end{sc}
-\end{small}
-\caption{Classification accuracies for naive Bayes and flexible 
-Bayes on various data sets.}
-\label{tab:sample-table}
-\end{center}
-\vskip -3mm
-\end{table}
+Overfitting to training data is a very common and important issue that needs to be dealt with when training neural networks or other machine learning models in general (see Ch.~5 in \citealt{Goodfellow-et-al-2016}).
+A model is said to be overfitting when \questionFive.
+
+\questionSix.
+
+Fig.~\ref{fig:example_acccurves} and \ref{fig:example_errorcurves} show a prototypical example of overfitting.
+We see in Figure~\ref{fig:example_acccurves} that \questionSeven.
+
+The extent to which our model overfits depends on many factors.
+For example, the quality and quantity of the training set and
+the complexity of the model. If we have a lot of varied training samples,
+or if our model is relatively shallow, it will in general
+be less prone to overfitting. Any form of regularisation
+will also limit the extent to which the model overfits.
+
+
+\subsection{Network width}
+
+\questionTableOne
+\questionFigureTwo
+
+
+First we investigate the effect of increasing the number of
+hidden units in a single hidden layer network when training
+on the EMNIST dataset.
+The network is trained using the Adam optimizer
+with a learning rate of $10^{-3}$ and a batch size of 100, for a total of 100 epochs.
+
+
+The input layer is of size 784, and output layer consists
+of 47 units. 
+Three different models were trained, with a
+single hidden layer of 32, 64 and 128 ReLU hidden units
+respectively.
+Figure~\ref{fig:width} depicts the error and accuracy curves over 100 epochs for the model with varying number of hidden units.
+Table~\ref{tab:width_exp} reports the final accuracy and generalization gap.
+We observe that \questionEight.
+
+\questionNine.
+
+
+\subsection{Network depth}
+
+\questionTableTwo
+\questionFigureThree
+
+Next we investigate the effect of varying the number of hidden
+layers in the network. 
+Table~\ref{tab:depth_exps} and Fig.~\ref{fig:depth} shows the results from
+training three models with one, two and three hidden layers respectively,
+each with 128 ReLU hidden units. 
+As with previous experiments, they are 
+trained with the Adam optimizer with a learning rate of  $10^{-3}$ and 
+a batch size of 100. 
+
+We observe that \questionTen.
+
+\questionEleven.
+
+\questionTwelve.
 
 
 
 
 
 \section{Dropout and Weight Penalty}
-In this section you should analyze and discuss Dropout and Weight Penalty, introduce them either as equations or as algorithmic pseudocode. Discuss the benefits of both approaches, how they help in mitigating the problem and how do they compare with each other. If you present the different approaches as algorithms, you can use the \verb+algorithm+ and \verb+algorithmic+ environments to format pseudocode (for instance, Algorithm~\ref{alg:example}). These require the corresponding style files, \verb+algorithm.sty+ and \verb+algorithmic.sty+ which are supplied with this package. 
+\label{sec:task2.1} 
 
-\begin{algorithm}[ht]
-\begin{algorithmic}
-   \STATE {\bfseries Input:} data $x_i$, size $m$
-   \REPEAT
-   \STATE Initialize $noChange = true$.
-   \FOR{$i=1$ {\bfseries to} $m-1$}
-   \IF{$x_i > x_{i+1}$} 
-   \STATE Swap $x_i$ and $x_{i+1}$
-   \STATE $noChange = false$
-   \ENDIF
-   \ENDFOR
-   \UNTIL{$noChange$ is $true$}
-\end{algorithmic}
-  \caption{Bubble Sort}
-  \label{alg:example}
-\end{algorithm}
+In this section, we investigate three regularization methods to 
+alleviate the overfitting problem, specifically dropout layers 
+and the L1 and L2 weight penalties.
 
-You should, in your own words, explain what these functions do, and how they differ.  
+\subsection{Dropout}
+
+Dropout~\cite{srivastava2014dropout}
+is a stochastic method that randomly inactivates
+neurons in a neural network according to an hyperparameter, the
+dropout rate. Dropout is commonly represented by an 
+additional layer inserted between the linear layer and 
+activation function.
+Its forward propagation during training is defined as follows:
+
+\begin{align}
+    mask &\sim bernoulli(p)\\
+    y' &= mask \odot y\
+\end{align}
+
+where $y, y' \in \mathbb{R}^d$ are the output of the linear layer 
+before and after applying dropout, 
+respectively. $mask \in \mathbb{R}^d$ is a mask vector randomly sampled from the
+Bernoulli distribution with parameter of inclusion probability
+$p$, and $\odot$ denotes the element-wise multiplication.
+
+At inference time, stochasticity is not desired, so no neurons
+are dropped. To account for the change in expectations of the
+output values, we scale them by the inverse of the dropout rate
+$p$:
+
+\begin{align}
+    y' &= y/p\
+\end{align}
+
+As there is no nonlinear calculation involved, the backward
+propagation is just the element-wise product of the gradients
+with respect to the layer outputs and mask created
+in the forward calculation. The backward propagation for
+dropout is therefore formulated as follows:
+
+\begin{align}
+    \frac{\partial y'}{\partial y} = mask
+\end{align}
+
+Dropout is an easy to implement and highly scalable
+method. It can be implemented as a layer-based calculation
+unit, and be placed on any layer of the neural network at
+will. Dropout can reduce the dependence of hidden features
+between layers so that the neurons of the next layer will not
+specifically depend on some features from of the previous layer.
+Instead, it force the network to evenly distribute information
+among all features. By randomly dropping some neurons in training,
+dropout makes use of a subset of the whole architecture, so it can 
+also be viewed as bagging different sub networks and averaging their
+outputs.
+
+
+
+\subsection{Weight penalty}
+
+L1 and L2 regularization~\cite{ng2004feature} are simple but effective
+methods to mitigate overfitting to training data.
+\questionThirteen.
+
+\questionFourteen.
+
+
 
 \section{Balanced EMNIST Experiments}
-Here you should present your experiments and results, comparing and contrasting with different hyper-parameter settings and different combinations when applied to multi-layer neural networks.  As before concentrate on the ``what'' (remember give enough information so someone can reproduce your experiments), the ``why'' (why did you choose the experiments that you performed -- you may have been motivated by your earlier results, by the literature, or by a specific research question), and the interpretation of your results. In addition, you should provide enough details about your experiments (hyperparameters, network architecture, training details, etc) such that a reader can reproduce your results based on the description.
+
+\questionTableThree
+
+\questionFigureFour
+
+\label{sec:task2.2}
+
+Here we evaluate the effectiveness of the given regularization methods for reducing the overfitting on the EMNIST dataset.
+We build a baseline architecture with three hidden layers, each with 128 neurons, which suffers from overfitting in EMNIST as shown in section \ref{sec:task1}.
+We follow the previous training settings where we deliberately let the baseline overfit
+on the training set as in previous experiments. 
+These settings ensure the fairness of the evaluation of three methods to alleviate overfitting. 
+Then, we apply the L1 or L2 regularization with dropout to our baseline and search for good hyperparameters on the validation set. 
+We summarize all
+the experimental results in Table~\ref{tab:hp_search}. For each method, we
+plot the relationship between generalisation gap and validation accuracy in Figure~\ref{fig:hp_search}.
+
+First we analyze three methods separately, train each over a set of hyperparameters and compare their best performing results.
+
+\questionFifteen.
 
 
-In every section, you should present your results in a way that makes it easy for a reader to understand what they mean. You should facilitate comparisons either using graphs with multiple curves or (if appropriate, e.g. for accuracies) a results table. You need to avoid having too many figures, poorly labelled graphs, and graphs which should be comparable but which use different axis scales. A good presentation will enable the reader to compare trends in the same graph -- each graph should summarise the results relating to a particular research (sub)question.
+\section{Literature Review: Maxout Networks}
+\label{sec:task3}
 
-Your discussion should interpret the results, both in terms of summarising the outcomes of a particular experiment, and attempting to relate to the underlying models. A good report would have some analysis, resulting in an understanding of why particular results are observed and how they help in improving performance and overcoming the problem, perhaps with reference to the literature. Use bibtex to organise your references -- in this case the references are in the file \verb+example-refs.bib+.  Here is a an example reference \citep{langley00}.  
+\paragraph{Summary of Maxout Networks} In this section, we
+briefly discuss another generalization method: Maxout net-
+works \cite{goodfellow2013maxout}. This paper further ex-
+plores the dropout method and proposes a new "maxout" layer
+ which can complement dropout.
+The authors evaluate the performance of Maxout Networks
+in four standard datasets, namely MNIST, CIFAR-10
+and 100, and SVHN. They point out that although
+dropout has been widely applied in deep models, \questionSixteen. Following this 
+motivation, they propose the Maxout activation layers. These can be considered learnable activations that work as a universal convex function approximator. The Maxout layer first
+maps the hidden space to $k$ subspaces through independent
+affine transformations, then, for each element in output
+vectors, it takes the maximum value across all subspaces.
 
-\section{Literature Review: Paper Title}
-In this section you should discuss one paper you chose from the list of 3 papers in the coursework specs. \textbf{Explain the paper in your own words}. The discussion should provide a summary of the paper, the strengths and limitations of the paper and what do you think can make it a better paper (if any missing experiments, visualization, theoretical proof etc.). Also remember to include the ``what'' and ``why'' of the experiments and a brief interpretation of the results, all in your own words. 
+\questionSeventeen.
+
+\paragraph{Strengths and limitations} The author proposed a novel
+neural activation unit that further exploits the dropout technique.
+\questionEighteen.
+
+Although the Maxout activation units can maximize
+the averaging effect of dropout in a deep architecture,
+we can argue that the Maxout computation
+is expensive. The advantage of dropout lies in its high 
+scalability and computational advantages. It can be arbitrarily
+applied to various network structures, and the calculation
+speed is fast, which is very suitable for heavy computing 
+algorithms such as training and inference of neural networks.
+In comparison, the design of the Maxout network needs to project the
+hidden vector into $k$ subspaces. Both the forward algorithm and the
+backward algorithm of dropout can be calculated in $\mathcal{O}(D)$
+complexity, but the complexity of Maxout is $\mathcal{O}(kD)$.
+This can lead to increasing the number of training epochs needed
+to reach convergence. 
+Furthermore, the universal approximation property of Maxout seems
+powerful, but it would be interesting to verify that it is useful
+in practice. Specifically, we can design an experiment where we 
+increase the number of subspaces $k$ and see where performances stop
+improving. In extreme cases, it is even possible that the 
+function learned is too specific to the training data, effectively
+causing overfitting.
 
 
-\section{Conclusions}
+
+\section{Conclusion}
 \label{sec:concl}
-Based on your experiments, what is the setup (models, algorithms) that produces your best system on the Balanced EMNIST data and helps to mitigate the problem?  
+    
+\questionNineteen.
 
-You should draw conclusions from the experiments, relate to the research questions outlined in the introduction (section~\ref{sec:intro}). You should state the conclusions clearly and concisely. It is good if the conclusion from one experiment influenced what you did in later experiments -- your aim is to learn from your experiments. Extra credit if you relate your findings to what has been reported in the literature.
-
-A good conclusions section would also include a further work discussion, building on work done so far, and referencing the literature where appropriate.
-
-\bibliography{example-refs}
+\bibliography{refs}
 
 \end{document} 
 
