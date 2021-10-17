@@ -12,4 +12,4 @@ The code in this repository is split into:
 ## Coursework 1
 This branch contains the python code and latex files of the first coursework. The code follows the same structure as the labs, in particular teh mlp package, and a specific notebook is provided to help you run experiments.
  * Detailed instructions are given in [MLP2021_22_cw1.pdf](https://github.com/VICO-UoE/mlpractical/blob/mlp2021-22/coursework1/MLP2021_22_cw1.pdf)
- * The [report directory](https://github.com/VICO-UoE/mlpractical_admin/tree/mlp2021-22/coursework1/report) contains the latex files that you will use to create your report.
+ * The [report directory](https://github.com/VICO-UoE/mlpractical/tree/mlp2021-22/coursework1/report) contains the latex files that you will use to create your report.
