@@ -138,19 +138,9 @@ class MNISTDataProvider(DataProvider):
             inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
 
     def next(self):
-<<<<<<< HEAD
-       """Returns next data batch or raises `StopIteration` if at end."""
-       print("triggered uncommented next method")
-       inputs_batch, targets_batch = super(MNISTDataProvider, self).next()
-       return inputs_batch, self.to_one_of_k(targets_batch)
-    
-    def __next__(self):
-        return self.next()
-=======
         """Returns next data batch or raises `StopIteration` if at end."""
         inputs_batch, targets_batch = super(MNISTDataProvider, self).next()
         return inputs_batch, self.to_one_of_k(targets_batch)
->>>>>>> lab2
 
     def to_one_of_k(self, int_targets):
         print("triggered to one of k")
@@ -167,15 +157,9 @@ class MNISTDataProvider(DataProvider):
             to zero except for the column corresponding to the correct class
             which is equal to one.
         """
-<<<<<<< HEAD
-        num_classes = 10
-        targets = np.array(int_targets).reshape(-1)
-        return np.eye(num_classes)[targets]
-=======
         one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
         one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
         return one_of_k_targets
->>>>>>> lab2
 
     def get_one_hot(targets, nb_classes):
         res = np.eye(nb_classes)[np.array(targets).reshape(-1)]
@@ -207,16 +191,9 @@ class MetOfficeDataProvider(DataProvider):
         assert os.path.isfile(data_path), (
             'Data file does not exist at expected path: ' + data_path
         )
-<<<<<<< HEAD
-
-        # rawinputs = np.loadtxt()
-        # load raw data from text file
-        # ...
-=======
         raw = np.loadtxt(data_path, skiprows=3, usecols=range(2, 32))
         assert window_size > 1, 'window_size must be at least 2.'
         self.window_size = window_size
->>>>>>> lab2
         # filter out all missing datapoints and flatten to a vector
         filtered = raw[raw >= 0].flatten()
         # normalise data to zero mean, unit standard deviation
@@ -231,14 +208,6 @@ class MetOfficeDataProvider(DataProvider):
         # inputs are first (window_size - 1) entries in windows
         inputs = windowed[:, :-1]
         # targets are last entry in windows
-<<<<<<< HEAD
-        # targets = ...
-        # initialise base class with inputs and targets arrays
-        super(MetOfficeDataProvider, self).__init__(
-            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
-    def __next__(self):
-            return self.next()
-=======
         targets = windowed[:, -1]
         super(MetOfficeDataProvider, self).__init__(
             inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
@@ -288,4 +257,3 @@ class CCPPDataProvider(DataProvider):
         targets = loaded[which_set + '_targets']
         super(CCPPDataProvider, self).__init__(
             inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
->>>>>>> lab2
