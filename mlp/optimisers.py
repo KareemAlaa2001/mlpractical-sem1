@@ -121,17 +121,30 @@ class Optimiser(object):
             and the second being a dict mapping the labels for the statistics
             recorded to their column index in the array.
         """
+<<<<<<< HEAD
         start_train_time = time.process_time()
         run_stats = [list(self.get_epoch_stats().values())]
         for epoch in range(1, num_epochs + 1):
             start_time = time.process_time()
             self.do_training_epoch()
             epoch_time = time.process_time() - start_time
+=======
+        start_train_time = time.time()
+        run_stats = [list(self.get_epoch_stats().values())]
+        for epoch in range(1, num_epochs + 1):
+            start_time = time.time()
+            self.do_training_epoch()
+            epoch_time = time.time() - start_time
+>>>>>>> 210b6d7399ca35fa5c3e31171f502dbd6c46b848
             if epoch % stats_interval == 0:
                 stats = self.get_epoch_stats()
                 self.log_stats(epoch, epoch_time, stats)
                 run_stats.append(list(stats.values()))
+<<<<<<< HEAD
         finish_train_time = time.process_time()
+=======
+        finish_train_time = time.time()
+>>>>>>> 210b6d7399ca35fa5c3e31171f502dbd6c46b848
         total_train_time = finish_train_time - start_train_time
         return np.array(run_stats), {k: i for i, k in enumerate(stats.keys())}, total_train_time
 
