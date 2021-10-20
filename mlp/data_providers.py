@@ -152,7 +152,6 @@ class MNISTDataProvider(DataProvider):
                 the data before each epoch.
             rng (RandomState): A seeded random number generator.
         """
-        print("triggered the MNISTDataProvider constructor")
         # check a valid which_set was provided
         assert which_set in ['train', 'valid', 'eval'], (
             'Expected which_set to be either train, valid or eval. '
@@ -182,7 +181,6 @@ class MNISTDataProvider(DataProvider):
         return inputs_batch, self.to_one_of_k(targets_batch)
 
     def to_one_of_k(self, int_targets):
-        print("triggered to one of k")
         """Converts integer coded class target to 1 of K coded targets.
         Args:
             int_targets (ndarray): Array of integer coded class targets (i.e.
