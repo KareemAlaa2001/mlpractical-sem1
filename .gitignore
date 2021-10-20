@@ -59,9 +59,5 @@ docs/_build/
 # PyBuilder
 target/
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 210b6d7399ca35fa5c3e31171f502dbd6c46b848
 #Notebook stuff
 notebooks/.ipynb_checkpoints/
