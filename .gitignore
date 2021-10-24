@@ -1,3 +1,4 @@
+
 #dropbox stuff
 *.dropbox*
 
@@ -58,6 +59,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Pycharm
+.idea/*
+
 
 #Notebook stuff
 notebooks/.ipynb_checkpoints/
