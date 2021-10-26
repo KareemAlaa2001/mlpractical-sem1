@@ -99,26 +99,22 @@
 
 %% Question 16:
 \newcommand{\questionSixteen} {
-\youranswer{Question 16 - Explain the motivation behind Maxout Networks as presented in \cite{goodfellow2013maxout}
-}
+\youranswer{Question 16 - Explain the motivation behind Maxout Networks as presented in \cite{goodfellow2013maxout}}
 }
 
 %% Question 17:
 \newcommand{\questionSeventeen} {
-\youranswer{Question 17 - State whether Dropout is compatible (can be used together) with Maxout and explain why
-}
+\youranswer{Question 17 - State whether Dropout is compatible (can be used together) with Maxout and explain why}
 }
 
 %% Question 18:
 \newcommand{\questionEighteen} {
-\youranswer{Question 18 - Give an overview of the experiment setup in \cite{goodfellow2013maxout} and analyse it from the point of view of how convincing their conclusions are 
-}
+\youranswer{Question 18 - Give an overview of the experiment setup in \cite{goodfellow2013maxout} and analyse it from the point of view of how convincing their conclusions are}
 }
 
 %% Question 19:
 \newcommand{\questionNineteen} {
-\youranswer{Question 19 - Briefly draw your conclusions based on the results from the previous sections (what are the take-away messages?) and conclude your report with a recommendation for future directions
-}
+\youranswer{Question 19 - Briefly draw your conclusions based on the results from the previous sections (what are the take-away messages?) and conclude your report with a recommendation for future directions}
 }
 
 
@@ -143,8 +139,7 @@
     \end{subfigure} 
     \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for different network widths.}
     \label{fig:width}
-\end{figure} 
-
+\end{figure}
 }
 }
 
@@ -168,7 +163,6 @@
     \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for different network depths.}
     \label{fig:depth}
 \end{figure} 
-
 }
 }
 
@@ -198,7 +192,6 @@
     \caption{Hyperparameter search for every method and combinations}
     \label{fig:hp_search}
 \end{figure*}
-
 }
 }
 
@@ -260,33 +253,25 @@ Question Table 3 - Fill in Table 3 with the results from your experiments varyin
         Model    &  Hyperparameter value(s) & Validation accuracy & Generalization gap \\
     \midrule
     \midrule
-        Baseline &  -                    &                     &                   \\
+        Baseline &  -                    &               0.836 &                 0.290 \\
     \midrule
-        \multirow{5}*{Dropout}
-                 & 0.1                   &                     &                   \\
-                 & 0.3                   &                     &                   \\
-                 & 0.5                   &                     &                   \\
+        \multirow{3}*{Dropout}
                  & 0.7                   &                     &                   \\
                  & 0.9                   &                     &                   \\
+                 & 0.95                  &                     &                   \\
     \midrule
-        \multirow{5}*{L1 penalty}
+        \multirow{3}*{L1 penalty}
                  & 1e-5                   &                     &                   \\
                  & 1e-4                   &                     &                   \\
-                 & 1e-3                   &                     &                   \\
-                 & 1e-2                   &                     &                   \\
                  & 1e-1                   &                     &                   \\
     \midrule
-        \multirow{5}*{L2 penalty}  
+        \multirow{3}*{L2 penalty}  
                  & 1e-5                   &                     &                   \\
                  & 1e-4                   &                     &                   \\
-                 & 1e-3                   &                     &                   \\
-                 & 1e-2                   &                     &                   \\
                  & 1e-1                   &                     &                   \\
     \midrule
-        \multirow{8}*{Combined}  
+        \multirow{6}*{Combined}  
                  & for example 0.95, L1 1e-6  &                     &                   \\
-                 & ?, ?                   &                     &                   \\
-                 & ?, ?                   &                     &                   \\
                  & ?, ?                   &                     &                   \\
                  & ?, ?                   &                     &                   \\
                  & ?, ?                   &                     &                   \\
