@@ -14,11 +14,7 @@ respect to the layer parameters.
 
 import numpy as np
 import mlp.initialisers as init
-<<<<<<< HEAD
-
-=======
 from mlp import DEFAULT_SEED
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 
 class Layer(object):
     """Abstract class defining the interface for a layer."""
@@ -72,8 +68,6 @@ class LayerWithParameters(Layer):
         """
         raise NotImplementedError()
 
-<<<<<<< HEAD
-=======
     def params_penalty(self):
         """Returns the parameter dependent penalty term for this layer.
 
@@ -81,7 +75,6 @@ class LayerWithParameters(Layer):
         """
         raise NotImplementedError()
 
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
     @property
     def params(self):
         """Returns a list of parameters of layer.
@@ -102,8 +95,6 @@ class LayerWithParameters(Layer):
         """
         raise NotImplementedError()
 
-<<<<<<< HEAD
-=======
 class StochasticLayerWithParameters(Layer):
     """Specialised layer which uses a stochastic forward propagation."""
 
@@ -225,7 +216,6 @@ class StochasticLayer(Layer):
         """
         raise NotImplementedError()
 
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 
 class AffineLayer(LayerWithParameters):
     """Layer implementing an affine tranformation of its inputs.
@@ -235,12 +225,8 @@ class AffineLayer(LayerWithParameters):
 
     def __init__(self, input_dim, output_dim,
                  weights_initialiser=init.UniformInit(-0.1, 0.1),
-<<<<<<< HEAD
-                 biases_initialiser=init.ConstantInit(0.)):
-=======
                  biases_initialiser=init.ConstantInit(0.),
                  weights_penalty=None, biases_penalty=None):
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
         """Initialises a parameterised affine layer.
 
         Args:
@@ -248,23 +234,17 @@ class AffineLayer(LayerWithParameters):
             output_dim (int): Dimension of the layer outputs.
             weights_initialiser: Initialiser for the weight parameters.
             biases_initialiser: Initialiser for the bias parameters.
-<<<<<<< HEAD
-=======
             weights_penalty: Weights-dependent penalty term (regulariser) or
                 None if no regularisation is to be applied to the weights.
             biases_penalty: Biases-dependent penalty term (regulariser) or
                 None if no regularisation is to be applied to the biases.
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
         """
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.weights = weights_initialiser((self.output_dim, self.input_dim))
         self.biases = biases_initialiser(self.output_dim)
-<<<<<<< HEAD
-=======
         self.weights_penalty = weights_penalty
         self.biases_penalty = biases_penalty
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 
     def fprop(self, inputs):
         """Forward propagates activations through the layer transformation.
@@ -278,11 +258,7 @@ class AffineLayer(LayerWithParameters):
         Returns:
             outputs: Array of layer outputs of shape (batch_size, output_dim).
         """
-<<<<<<< HEAD
-        return inputs.dot(self.weights.T) + self.biases
-=======
         return self.weights.dot(inputs.T).T + self.biases
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -318,10 +294,6 @@ class AffineLayer(LayerWithParameters):
 
         grads_wrt_weights = np.dot(grads_wrt_outputs.T, inputs)
         grads_wrt_biases = np.sum(grads_wrt_outputs, axis=0)
-<<<<<<< HEAD
-        return [grads_wrt_weights, grads_wrt_biases]
-
-=======
 
         if self.weights_penalty is not None:
             grads_wrt_weights += self.weights_penalty.grad(parameter=self.weights)
@@ -343,7 +315,6 @@ class AffineLayer(LayerWithParameters):
             params_penalty += self.biases_penalty(self.biases)
         return params_penalty
 
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
     @property
     def params(self):
         """A list of layer parameter values: `[weights, biases]`."""
@@ -358,10 +329,6 @@ class AffineLayer(LayerWithParameters):
         return 'AffineLayer(input_dim={0}, output_dim={1})'.format(
             self.input_dim, self.output_dim)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 class SigmoidLayer(Layer):
     """Layer implementing an element-wise logistic sigmoid transformation."""
 
@@ -401,8 +368,6 @@ class SigmoidLayer(Layer):
     def __repr__(self):
         return 'SigmoidLayer'
 
-<<<<<<< HEAD
-=======
 class ReluLayer(Layer):
     """Layer implementing an element-wise rectified linear transformation."""
 
@@ -557,7 +522,6 @@ class TanhLayer(Layer):
 
     def __repr__(self):
         return 'TanhLayer'
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
 
 class SoftmaxLayer(Layer):
     """Layer implementing a softmax transformation."""
@@ -575,13 +539,9 @@ class SoftmaxLayer(Layer):
         Returns:
             outputs: Array of layer outputs of shape (batch_size, output_dim).
         """
-<<<<<<< HEAD
-        exp_inputs = np.exp(inputs)
-=======
         # subtract max inside exponential to improve numerical stability -
         # when we divide through by sum this term cancels
         exp_inputs = np.exp(inputs - inputs.max(-1)[:, None])
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
         return exp_inputs / exp_inputs.sum(-1)[:, None]
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
@@ -606,8 +566,6 @@ class SoftmaxLayer(Layer):
 
     def __repr__(self):
         return 'SoftmaxLayer'
-<<<<<<< HEAD
-=======
 
 class RadialBasisFunctionLayer(Layer):
     """Layer implementing projection to a grid of radial basis functions."""
@@ -782,4 +740,3 @@ class ReshapeLayer(Layer):
 
     def __repr__(self):
         return 'ReshapeLayer(output_shape={0})'.format(self.output_shape)
->>>>>>> 99d07965e2b932d44b9e72fcf632104796aaa1a5
