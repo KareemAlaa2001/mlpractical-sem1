@@ -64,13 +64,13 @@ Finally, we conclude our study in section \ref{sec:concl}, noting that \question
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/accuracy_IHO_withrelu.png}
+        \includegraphics[width=\linewidth]{figures/example_accuracy.pdf}
         \caption{accuracy by epoch}
         \label{fig:example_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/error_IHO_withrelu.png}
+        \includegraphics[width=\linewidth]{figures/example_error.pdf}
         \caption{error by epoch}
         \label{fig:example_errorcurves}
     \end{subfigure} 
@@ -155,7 +155,7 @@ and the L1 and L2 weight penalties.
 Dropout~\cite{srivastava2014dropout}
 is a stochastic method that randomly inactivates
 neurons in a neural network according to an hyperparameter, the
-dropout rate. Dropout is commonly represented by an 
+inclusion rate. Dropout is commonly represented by an 
 additional layer inserted between the linear layer and 
 activation function.
 Its forward propagation during training is defined as follows:
@@ -224,9 +224,11 @@ methods to mitigate overfitting to training data.
 
 Here we evaluate the effectiveness of the given regularization methods for reducing the overfitting on the EMNIST dataset.
 We build a baseline architecture with three hidden layers, each with 128 neurons, which suffers from overfitting in EMNIST as shown in section \ref{sec:task1}.
-We follow the previous training settings where we deliberately let the baseline overfit
-on the training set as in previous experiments. 
-These settings ensure the fairness of the evaluation of three methods to alleviate overfitting. 
+
+We start by lowering the learning rate to $10^{-4}$, as the previous runs were overfitting in only a handful of epochs. Results for the new baseline (c.f. Table~\ref{tab:hp_search}) confirm that lowering learning rate helps, so all further experiments are run using it.
+
+%We follow the previous training settings where we deliberately let the baseline overfit on the training set as in previous experiments. 
+%These settings ensure the fairness of the evaluation of three methods to alleviate overfitting. 
 Then, we apply the L1 or L2 regularization with dropout to our baseline and search for good hyperparameters on the validation set. 
 We summarize all
 the experimental results in Table~\ref{tab:hp_search}. For each method, we
