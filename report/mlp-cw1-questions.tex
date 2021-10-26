@@ -123,7 +123,7 @@
 %% Question Figure 2:
 \newcommand{\questionFigureTwo} {
 \youranswer{Question Figure 2 - Replace the images in Figure 2 with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden units.
-
+%
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
@@ -139,14 +139,14 @@
     \end{subfigure} 
     \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for different network widths.}
     \label{fig:width}
-\end{figure}
+\end{figure} 
 }
 }
 
 %% Question Figure 3:
 \newcommand{\questionFigureThree} {
 \youranswer{Question Figure 3 - Replace these images with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden layers.
-
+%
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
@@ -168,13 +168,13 @@
 
 %% Question Figure 4:
 \newcommand{\questionFigureFour} {
-\youranswer{Question Figure 4 - Replace these images with figures depicting the Validation Accuracy and Generalisation Gap for each of your experiments varying the Dropout rate, L1/L2 weight penalty, and for the 8 combined experiments (you will have to find a way to best display this information in one subfigure).
-
+\youranswer{Question Figure 4 - Replace these images with figures depicting the Validation Accuracy and Generalisation Gap for each of your experiments varying the Dropout inclusion rate, L1/L2 weight penalty, and for the 8 combined experiments (you will have to find a way to best display this information in one subfigure).
+%
 \begin{figure*}[t]
     \centering
     \begin{subfigure}{.3\linewidth}
         \includegraphics[width=\linewidth]{figures/empty_dropout_plot.png}
-        \caption{Metrics by dropout rate}
+        \caption{Metrics by inclusion rate}
         \label{fig:dropoutrates}
     \end{subfigure} 
     \begin{subfigure}{.3\linewidth}
@@ -201,7 +201,7 @@
 \newcommand{\questionTableOne} {
 \youranswer{
 Question Table 1 - Fill in Table 1 with the results from your experiments varying the number of hidden units.
-
+%
 \begin{table}[t]
     \centering
     \begin{tabular}{c|cc}
@@ -223,7 +223,7 @@ Question Table 1 - Fill in Table 1 with the results from your experiments varyin
 \newcommand{\questionTableTwo} {
 \youranswer{
 Question Table 2 - Fill in Table 2 with the results from your experiments varying the number of hidden layers.
-
+%
 \begin{table}[t]
     \centering
     \begin{tabular}{c|cc}
@@ -245,7 +245,7 @@ Question Table 2 - Fill in Table 2 with the results from your experiments varyin
 \newcommand{\questionTableThree} {
 \youranswer{
 Question Table 3 - Fill in Table 3 with the results from your experiments varying the hyperparameter values for each of L1 regularisation, L2 regularisation, and Dropout (use the values shown on the table) as well as the results for your experiments combining L1/L2 and Dropout (you will have to pick what combinations of hyperparameter values to test for the combined experiments; each of the combined experiments will need to use Dropout and either L1 or L2 regularisation; run an experiment for each of 8 different combinations). Use \textit{italics} to print the best result per criterion for each set of experiments, and \textbf{bold} for the overall best result per criterion.
-
+%
 \begin{table*}[t]
     \centering
     \begin{tabular}{c|c|cc}
@@ -261,13 +261,13 @@ Question Table 3 - Fill in Table 3 with the results from your experiments varyin
                  & 0.95                  &                     &                   \\
     \midrule
         \multirow{3}*{L1 penalty}
-                 & 1e-5                   &                     &                   \\
                  & 1e-4                   &                     &                   \\
+                 & 1e-3                   &                     &                   \\
                  & 1e-1                   &                     &                   \\
     \midrule
         \multirow{3}*{L2 penalty}  
-                 & 1e-5                   &                     &                   \\
                  & 1e-4                   &                     &                   \\
+                 & 1e-3                   &                     &                   \\
                  & 1e-1                   &                     &                   \\
     \midrule
         \multirow{6}*{Combined}  
@@ -282,7 +282,6 @@ Question Table 3 - Fill in Table 3 with the results from your experiments varyin
     \caption{Results of all hyperparameter search experiments. \emph{italics} indicate the best results per series and \textbf{bold} indicate the best overall}
     \label{tab:hp_search}
 \end{table*}
-
 }
 }
 

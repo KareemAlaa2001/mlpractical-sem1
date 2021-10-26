@@ -64,13 +64,13 @@ Finally, we conclude our study in section \ref{sec:concl}, noting that \question
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/accuracy_base.pdf}
+        \includegraphics[width=\linewidth]{figures/example_accuracy.pdf}
         \caption{accuracy by epoch}
         \label{fig:example_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/error_base.pdf}
+        \includegraphics[width=\linewidth]{figures/example_error.pdf}
         \caption{error by epoch}
         \label{fig:example_errorcurves}
     \end{subfigure} 
@@ -155,7 +155,7 @@ and the L1 and L2 weight penalties.
 Dropout~\cite{srivastava2014dropout}
 is a stochastic method that randomly inactivates
 neurons in a neural network according to an hyperparameter, the
-dropout rate. Dropout is commonly represented by an 
+inclusion rate. Dropout is commonly represented by an 
 additional layer inserted between the linear layer and 
 activation function.
 Its forward propagation during training is defined as follows:
