@@ -670,7 +670,7 @@ class DropoutLayer(StochasticLayer):
             else:
                 randArr = self.getRng().uniform(size=np.shape(inputs))
             
-            # Converting to an int array of trues and falses
+            # Converting to a float array of trues and falses
             randArr = (randArr <= self.incl_prob).astype(float)
             # normalising during training 
             # randArr *= 1/self.incl_prob
