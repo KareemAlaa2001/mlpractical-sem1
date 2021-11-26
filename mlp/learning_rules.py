@@ -315,3 +315,74 @@ class AdaGradLearningRule(GradientDescentLearningRule):
             param -= (self.learning_rate * grad /
                       (sum_sq_grad + self.epsilon) ** 0.5)
 
+
+class RMSPropLearningRule(GradientDescentLearningRule):
+    """Root mean squared gradient normalised learning rule (RMSProp).
+    First-order gradient-descent based learning rule which normalises gradient
+    updates by a exponentially smoothed estimate of the gradient second
+    moments.
+    References:
+      [1]: Neural Networks for Machine Learning: Lecture 6a slides
+           University of Toronto,Computer Science Course CSC321
+      http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf
+    """
+
+    def __init__(self, learning_rate=1e-3, beta=0.9, epsilon=1e-8):
+        """Creates a new learning rule object.
+        Args:
+            learning_rate: A postive scalar to scale gradient updates to the
+                parameters by. This needs to be carefully set - if too large
+                the learning dynamic will be unstable and may diverge, while
+                if set too small learning will proceed very slowly.
+            beta: Exponential decay rate for gradient second moment
+                estimates. This should be a scalar value in [0, 1]. The running
+                gradient second moment estimate is calculated using
+                `m_2 = beta * m_2_prev + (1 - beta) * g**2`
+                 where `m_2_prev` is the previous estimate and `g` the current
+                 parameter gradients.
+            epsilon: 'Softening' parameter to stop updates diverging when
+                gradient second moment estimates are close to zero. Should be
+                set to a small positive value.
+        """
+        super(RMSPropLearningRule, self).__init__(learning_rate)
+        assert beta >= 0. and beta <= 1., 'beta should be in [0, 1].'
+        assert epsilon > 0., 'epsilon should be > 0.'
+        self.beta = beta
+        self.epsilon = epsilon
+
+    def initialise(self, params):
+        """Initialises the state of the learning rule for a set or parameters.
+        This must be called before `update_params` is first called.
+        Args:
+            params: A list of the parameters to be optimised. Note these will
+                be updated *in-place* to avoid reallocating arrays on each
+                update.
+        """
+        super(RMSPropLearningRule, self).initialise(params)
+        self.moms_2 = []
+        for param in self.params:
+            self.moms_2.append(np.zeros_like(param))
+
+    def reset(self):
+        """Resets any additional state variables to their initial values.
+        For this learning rule this corresponds to zeroing all gradient
+        second moment estimates.
+        """
+        for mom_2 in self.moms_2:
+            mom_2 *= 0.
+
+    def update_params(self, grads_wrt_params):
+        """Applies a single update to all parameters.
+        All parameter updates are performed using in-place operations and so
+        nothing is returned.
+        Args:
+            grads_wrt_params: A list of gradients of the scalar loss function
+                with respect to each of the parameters passed to `initialise`
+                previously, with this list expected to be in the same order.
+        """
+        for param, mom_2, grad in zip(
+                self.params, self.moms_2, grads_wrt_params):
+            mom_2 *= self.beta
+            mom_2 += (1. - self.beta) * grad ** 2
+            param -= (self.learning_rate * grad /
+                      (mom_2 + self.epsilon) ** 0.5)
