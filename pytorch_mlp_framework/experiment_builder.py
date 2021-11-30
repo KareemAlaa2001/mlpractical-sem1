@@ -151,14 +151,15 @@ class ExperimentBuilder(nn.Module):
         layers = []
         
         """
-        Complete the code in the block below to collect absolute mean of the gradients for each layer in all_grads with the             layer names in layers.
+        Complete the code in the block below to collect absolute mean of the gradients for each layer in all_grads with the layer names in layers.
         """
         ########################################
-        
-        
+        for layer, weights in named_parameters:
+            layers.append(layer)
+            all_grads.append(torch.mean(torch.abs(weights.grad)))
         ########################################
             
-        
+        print("ALL GRADS[0]", all_grads[0])
         plt = self.plot_func_def(all_grads, layers)
         
         return plt

@@ -67,3 +67,7 @@ target/
 
 #Notebook stuff
 notebooks/.ipynb_checkpoints/
+
+.vscode
+cw1Figs/
+.ipynb_checkpoints/
