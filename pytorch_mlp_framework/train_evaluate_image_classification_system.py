@@ -61,8 +61,8 @@ def main():
 
     conv_experiment = ExperimentBuilder(network_model=custom_conv_net,
                                         experiment_name=args.experiment_name,
-                                        # num_epochs=args.num_epochs,
-                                        num_epochs=1,
+                                        num_epochs=args.num_epochs,
+                                        # num_epochs=1,
                                         weight_decay_coefficient=args.weight_decay_coefficient,
                                         use_gpu=args.use_gpu,
                                         continue_from_epoch=args.continue_from_epoch,
