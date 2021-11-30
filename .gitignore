@@ -1,6 +1,7 @@
 
 #dropbox stuff
 *.dropbox*
+.idea/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -66,3 +67,7 @@ target/
 
 #Notebook stuff
 notebooks/.ipynb_checkpoints/
+
+.vscode
+cw1Figs/
+.ipynb_checkpoints/
