@@ -49,11 +49,12 @@ def main():
         processing_block_type = EmptyBlock
         dim_reduction_block_type = EmptyBlock
     elif args.block_type == 'bn_block':
-        processing_block_type = ConvBatchNormBlock
-        dim_reduction_block_type = ConvolutionalDimensionalityReductionBlock
+        processing_block_type = BatchNormConvBlock
+        dim_reduction_block_type = BatchNormDimReductionConvBlock
     elif args.block_type == 'bnrc_block':
         assert args.learning_rate == 1e-2, "Wrong learning rate passed in!"
-        raise NotImplementedError
+        processing_block_type = ResidualBatchNormConvBlock
+        dim_reduction_block_type = ResidualBatchNormDimReductionConvBlock
     else:
         raise ModuleNotFoundError
     ##  TODO add args for just ~~BN AND~~ BN+RC 
