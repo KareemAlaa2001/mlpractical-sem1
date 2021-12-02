@@ -48,8 +48,15 @@ def main():
     elif args.block_type == 'empty_block':
         processing_block_type = EmptyBlock
         dim_reduction_block_type = EmptyBlock
+    elif args.block_type == 'bn_block':
+        processing_block_type = ConvBatchNormBlock
+        dim_reduction_block_type = ConvolutionalDimensionalityReductionBlock
+    elif args.block_type == 'bnrc_block':
+        assert args.learning_rate == 1e-2, "Wrong learning rate passed in!"
+        raise NotImplementedError
     else:
         raise ModuleNotFoundError
+    ##  TODO add args for just ~~BN AND~~ BN+RC 
 
     custom_conv_net = ConvolutionalNetwork(  # initialize our network object, in this case a ConvNet
         input_shape=(args.batch_size, args.image_num_channels, args.image_height, args.image_width),
@@ -67,7 +74,8 @@ def main():
                                         use_gpu=args.use_gpu,
                                         continue_from_epoch=args.continue_from_epoch,
                                         train_data=train_data_loader, val_data=val_data_loader,
-                                        test_data=test_data_loader)  # build an experiment object
+                                        test_data=test_data_loader, 
+                                        learning_rate=args.learning_rate)  # build an experiment object
     experiment_metrics, test_metrics = conv_experiment.run_experiment()  # run experiment and return experiment metrics
 
 if __name__=='__main__':

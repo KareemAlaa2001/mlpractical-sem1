@@ -39,6 +39,9 @@ def get_args():
                              'dimensionality reduction layers)')
     parser.add_argument('--num_epochs', nargs="?", type=int, default=100, help='Total number of epochs for model training')
     parser.add_argument('--num_classes', nargs="?", type=int, default=100, help='Number of classes in the dataset')
+
+    parser.add_argument('--learning_rate', nargs="?", type=float, default=1e-3, help='Learning rate to be used in training')
+
     parser.add_argument('--experiment_name', nargs="?", type=str, default="exp_1",
                         help='Experiment name - to be used for building the experiment folder')
     parser.add_argument('--use_gpu', nargs="?", type=str2bool, default=True,
