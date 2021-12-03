@@ -52,7 +52,6 @@ def main():
         processing_block_type = BatchNormConvBlock
         dim_reduction_block_type = BatchNormDimReductionConvBlock
     elif args.block_type == 'bnrc_block':
-        assert args.learning_rate == 1e-2, "Wrong learning rate passed in!"
         processing_block_type = ResidualBatchNormConvBlock
         dim_reduction_block_type = ResidualBatchNormDimReductionConvBlock
     else:
