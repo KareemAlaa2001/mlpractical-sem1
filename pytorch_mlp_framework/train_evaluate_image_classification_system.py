@@ -54,6 +54,9 @@ def main():
     elif args.block_type == 'bnrc_block':
         processing_block_type = ResidualBatchNormConvBlock
         dim_reduction_block_type = ResidualBatchNormDimReductionConvBlock
+    elif args.block_type == 'rc_block':
+        processing_block_type = ResidualConvProcessingBlock
+        dim_reduction_block_type = ResidualDimReductionConvBlock
     else:
         raise ModuleNotFoundError
     ##  TODO add args for just ~~BN AND~~ BN+RC 
